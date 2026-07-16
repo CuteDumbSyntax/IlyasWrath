@@ -1,0 +1,3 @@
+displayName = Ilya's Wrath
+author = severedbl00d
+version = 0.1

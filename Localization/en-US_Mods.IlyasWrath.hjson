@@ -1,0 +1,39 @@
+# This file will automatically update with entries for new content after a build and reload.
+# Please read https://github.com/tModLoader/tModLoader/wiki/Localization to learn more about localization and these files.
+
+Items: {
+	ragequit: {
+		DisplayName: ragequit
+		Tooltip:
+			'''
+			Template of an item
+			Replacing this tooltip is duty 
+			It's snowing on Mt.Fuji
+			'''
+	}
+
+	DivineArtifact: {
+		DisplayName: Divine Artifact
+		Tooltip:
+			'''
+			Increases damage to ALL classes greatly
+
+			"Maybe with this, we can defeat HIM?"
+			'''
+	}
+
+	Root: {
+		DisplayName: Root
+		Tooltip: ""
+	}
+}
+
+NPCs: {
+	Ilya.DisplayName: Ilya
+	IlyasServant.DisplayName: ???
+}
+
+Projectiles: {
+	StarOfWraith.DisplayName: Star Of Wraith
+	BroomProjectile.DisplayName: Broom Projectile
+}
