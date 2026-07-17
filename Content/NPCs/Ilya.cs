@@ -68,7 +68,7 @@ namespace IlyasWrath.Content.NPCs
         {
             NPC.frameCounter++;
 
-            if (NPC.frameCounter >= 3)
+            if (NPC.frameCounter >= 2)
             {
                 NPC.frameCounter = 0;
                 NPC.frame.Y += frameHeight;
@@ -84,7 +84,7 @@ namespace IlyasWrath.Content.NPCs
             Dash,
             SummonAdds,
             CircleShoot,
-            Slam
+            DeathBeam
         }
 
         private bool HasWitchBroom(Player player)
@@ -292,8 +292,8 @@ namespace IlyasWrath.Content.NPCs
                     CircleShoot(player, phase);
                     break;
 
-                case AttackState.Slam:
-                    Slam(player, phase);
+                case AttackState.DeathBeam:
+                    DeathBeam(player, phase);
                     break;
                 
             }
@@ -328,7 +328,7 @@ namespace IlyasWrath.Content.NPCs
                     (int)AttackState.Dash,
                     (int)AttackState.SummonAdds,
                     (int)AttackState.CircleShoot,
-                    (int)AttackState.Slam
+                    (int)AttackState.DeathBeam
                 };
 
                 attacks.Remove((int)NPC.ai[0]);
@@ -358,19 +358,26 @@ namespace IlyasWrath.Content.NPCs
 
             int fireRate = phase == 3 ? 20 : 30;
 
-            if (NPC.ai[1] % fireRate == 0 && Main.netMode != NetmodeID.MultiplayerClient)
-            {
-                Vector2 shootDir = player.Center - NPC.Center;
-                shootDir.Normalize();
+            int warningRate = phase == 3 ? 18 : 30;
 
-                int p = Projectile.NewProjectile(
+            if (NPC.ai[1] % warningRate == 0 &&
+                Main.netMode != NetmodeID.MultiplayerClient)
+            {
+
+                SoundEngine.PlaySound(
+                    new SoundStyle("IlyasWrath/Content/Sounds/warning"),
+                    NPC.Center
+                    );
+
+
+                Projectile.NewProjectile(
                     NPC.GetSource_FromAI(),
-                    NPC.Center,
-                    shootDir * 12,
-                    ModContent.ProjectileType<StarOfWraith>(), // proj 1
-                    50,
-                    0f, Main.myPlayer);
-                Main.projectile[p].timeLeft = 600;
+                    new Vector2(player.Center.X, player.Center.Y - 1000),
+                    Vector2.Zero,
+                    ModContent.ProjectileType<WarningLine>(),
+                    0,
+                    0f,
+                    Main.myPlayer);
             }
 
             if (NPC.ai[1] > 300)
@@ -486,50 +493,78 @@ namespace IlyasWrath.Content.NPCs
                 NextAttack(phase);
         }
 
-        private void Slam(Player player, int phase)
+        private void DeathBeam(Player player, int phase)
         {
             float hoverHeight = 600f;
-            float flySpeed = phase == 3 ? 40f : 30f;
 
-            // Move above player
-            if (NPC.ai[1] < 90)
+            // Fly above player
+            if (NPC.ai[1] < 80)
             {
-                Vector2 target = new Vector2(player.Center.X, player.Center.Y - hoverHeight);
+                Vector2 target = player.Center + new Vector2(0, -hoverHeight);
 
                 Vector2 move = target - NPC.Center;
 
-                if (move.Length() > flySpeed)
-                    move = Vector2.Normalize(move) * flySpeed;
+                float speed = 22f;
+
+                if (move.Length() > speed)
+                    move = Vector2.Normalize(move) * speed;
 
                 NPC.velocity = move;
             }
-            // Pause for dramatic effect
-            else if (NPC.ai[1] < 110)
+
+            // Charge
+            else if (NPC.ai[1] < 120)
             {
                 NPC.velocity *= 0.9f;
-            }
-            // Slam!
-            else if (NPC.ai[1] == 110)
-            {
-                Main.instance.CameraModifiers.Add(
-                    new PunchCameraModifier(
-                    NPC.Center,
-                    Main.rand.NextVector2CircularEdge(1f, 1f),
-                    15f,
-                    8f,
-                    150,
-                    1200f
-                    )
-                    );
-                NPC.velocity = new Vector2(0f, phase == 3 ? 60f : 30f);
-            }
-            else
-            {
 
-                NPC.velocity.Y = phase == 3 ? 18f : 12f;
+                if (NPC.ai[1] == 80)
+                {
+                    SoundEngine.PlaySound(SoundID.Item122, NPC.Center);
+
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        Projectile.NewProjectile(
+                        NPC.GetSource_FromAI(),
+                        NPC.Center,
+                        Vector2.Zero,
+                        ModContent.ProjectileType<DeathBeam>(),
+                        80,
+                        0f,
+                        Main.myPlayer,
+                        NPC.whoAmI
+                        );
+                    }
+                }
             }
 
-            if (NPC.ai[1] > 170)
+            // Fire prediction projectiles
+            else if (NPC.ai[1] < 360)
+            {
+                NPC.velocity = Vector2.Zero;
+
+                if (NPC.ai[1] % 25 == 0)
+                {
+                    Vector2 future =
+                        player.Center +
+                        player.velocity * 18f;
+
+                    Vector2 dir = future - NPC.Center;
+
+                    dir.Normalize();
+
+                    int p = Projectile.NewProjectile(
+                        NPC.GetSource_FromAI(),
+                        NPC.Center,
+                        dir * 12,
+                        ModContent.ProjectileType<Petal>(),
+                        40,
+                        0f, Main.myPlayer);
+
+                    Main.projectile[p].timeLeft = 600;
+                }
+            }
+
+            if (NPC.ai[1] > 420)
                 NextAttack(phase);
         }
 

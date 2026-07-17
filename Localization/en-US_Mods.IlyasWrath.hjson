@@ -6,9 +6,8 @@ Items: {
 		DisplayName: ragequit
 		Tooltip:
 			'''
-			Template of an item
-			Replacing this tooltip is duty 
-			It's snowing on Mt.Fuji
+			first item of this cursed mod
+			make bosses ragequit with this
 			'''
 	}
 
@@ -24,7 +23,7 @@ Items: {
 
 	Root: {
 		DisplayName: Root
-		Tooltip: ""
+		Tooltip: "[c/9900ff:For unknown reason, you feel dumber wearing this]"
 	}
 }
 
@@ -36,4 +35,8 @@ NPCs: {
 Projectiles: {
 	StarOfWraith.DisplayName: Star Of Wraith
 	BroomProjectile.DisplayName: Broom Projectile
+	DeathBeam.DisplayName: Death Beam
+	Petal.DisplayName: Petal
+	DeathPillar.DisplayName: Death Pillar
+	WarningLine.DisplayName: Warning Line
 }
