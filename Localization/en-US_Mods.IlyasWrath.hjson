@@ -39,10 +39,35 @@ Items: {
 		DisplayName: Gift
 		Tooltip:
 			'''
-			Permanently increases maximum life by 1000
+			Permanently increases maximum life by 2000!
 
 			[c/9900ff:"I mean... Every boss has more than 1,000 health, and player has only 500 maximum health... Not fair!"]
 			'''
+	}
+
+	IlyaRelic: {
+		DisplayName: Ilya Relic
+		Tooltip:
+			'''
+			Impressive.
+			But...
+			Was it worth it?
+			'''
+	}
+
+	CoolBox: {
+		DisplayName: Cool Box
+		Tooltip:
+			'''
+			Right click to open.
+
+			Treasure bag? Pfft... Cool box is better!
+			'''
+	}
+
+	CensoredThing: {
+		DisplayName: Censored Thing
+		Tooltip: ""
 	}
 }
 
@@ -56,6 +81,16 @@ Projectiles: {
 	BroomProjectile.DisplayName: Broom Projectile
 	DeathBeam.DisplayName: Death Beam
 	Petal.DisplayName: Petal
-	DeathPillar.DisplayName: Death Pillar
+	DeathPillar.DisplayName: Death Beam
 	WarningLine.DisplayName: Warning Line
+	BloomingFlower.DisplayName: Blooming Flower
+	FallingPetal.DisplayName: Petal
+	FunnyIlya.DisplayName: Censored Cutie
+}
+
+Buffs: {
+	FunnyIlyaBuff: {
+		DisplayName: Censored cutie
+		Description: You have a flying pet! But you can't really see it.
+	}
 }

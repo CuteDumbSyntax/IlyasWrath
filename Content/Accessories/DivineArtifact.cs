@@ -22,8 +22,10 @@ namespace IlyasWrath.Content.Accessories
 
 		public override void UpdateAccessory(Player player, bool hideVisual)
 		{
-			player.GetDamage(DamageClass.Generic) += 2f; // Increase ALL player damage by 100%
-
+			player.GetDamage(DamageClass.Generic) += 10f; // Increase ALL player damage by 100%
+			player.GetDamage(DamageClass.Magic) += 6f;
+			player.GetDamage(DamageClass.Summon) += 8f;
+			player.GetDamage(DamageClass.Ranged) += 9f;
 
 		}
 

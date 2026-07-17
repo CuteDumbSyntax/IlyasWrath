@@ -4,12 +4,16 @@ using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.Audio;
+using Terraria.ModLoader.Utilities;
 using Terraria.ModLoader;
 using IlyasWrath.Content.NPCs;
 using IlyasWrath.Common;
+using Terraria.DataStructures;
 using IlyasWrath.Content.Projectiles;
 using System;
 using System.Collections.Generic;
+using IlyasWrath.Content.Items;
+using IlyasWrath.Content.Placeable;
 using Terraria.Graphics.CameraModifiers;
 
 namespace IlyasWrath.Content.NPCs
@@ -22,6 +26,9 @@ namespace IlyasWrath.Content.NPCs
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 10;
+
+
+            
 
         }
 
@@ -36,7 +43,7 @@ namespace IlyasWrath.Content.NPCs
 
             NPC.damage = 180;
             NPC.defense = 90;
-            NPC.lifeMax = 1000000;
+            NPC.lifeMax = 4000000;
 
             NPC.knockBackResist = 0f;
 
@@ -50,8 +57,12 @@ namespace IlyasWrath.Content.NPCs
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = null;
 
-            Music = MusicID.Boss5;
-        }
+            if (!Main.dedServ)
+            {
+                Music = MusicLoader.GetMusicSlot(Mod,"Music/DestroyerOfStars");
+            }
+
+            }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
@@ -63,6 +74,16 @@ namespace IlyasWrath.Content.NPCs
                     "...")
             });
         }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
+            npcLoot.Add(notExpertRule);
+            npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<CoolBox>()));
+            npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<Placeable.IlyaRelic>()));
+
+        }
+
 
         public override void FindFrame(int frameHeight)
         {
@@ -410,87 +431,98 @@ namespace IlyasWrath.Content.NPCs
                 NextAttack(phase);
         }
 
+        private int rainPortal = -1;
+
         private void SummonAdds(Player player, int phase)
         {
-            if (NPC.ai[1] == 1 && Main.netMode != NetmodeID.MultiplayerClient)
-            {
-                for (int i = 0; i < 10; i++)
-                {
-                    Vector2 spawn = player.Center + Main.rand.NextVector2Circular(400, 400);
-
-                    NPC.NewNPC(
-                        NPC.GetSource_FromAI(),
-                        (int)spawn.X,
-                        (int)spawn.Y,
-                        ModContent.NPCType<IlyasServant>());
-                }
-            }
-
             Move(player.Center + new Vector2(0, -550), phase);
 
-            bool alive = false;
-
-            for (int i = 0; i < Main.maxNPCs; i++)
+            if (NPC.ai[1] == 1 && Main.netMode != NetmodeID.MultiplayerClient)
             {
-                NPC n = Main.npc[i];
-
-                if (n.active && n.type == ModContent.NPCType<IlyasServant>())
-                {
-                    alive = true;
-                    break;
-                }
+                rainPortal = Projectile.NewProjectile(
+                    NPC.GetSource_FromAI(),
+                    NPC.Center + new Vector2(0, -120),
+                    Vector2.Zero,
+                    ModContent.ProjectileType<BloomingFlower>(),
+                    0,
+                    0f,
+                    Main.myPlayer,
+                    NPC.whoAmI);
             }
 
-            if (!alive)
+            if (NPC.ai[1] > 300)
+            {
+                if (rainPortal != -1 &&
+                    Main.projectile[rainPortal].active)
+                {
+                    Main.projectile[rainPortal].Kill();
+                }
+
                 NextAttack(phase);
+            }
         }
 
         private void CircleShoot(Player player, int phase)
         {
-            float radius = 400f;
+            const int totalDashes = 4;
 
-            float angle = NPC.ai[1] * (phase == 3 ? 0.06f : 0.045f);
+            int dashNumber = (int)NPC.localAI[0];
+            int timer = (int)NPC.ai[1];
 
-            Vector2 desiredPosition =
-                player.Center +
-                new Vector2(
-                    (float)Math.Cos(angle),
-                    (float)Math.Sin(angle)
-                ) * radius;
-
-            float orbitSpeed = phase == 3 ? 20f : 16f;
-            
-
-            Vector2 move = desiredPosition - NPC.Center;
-
-            if (move.Length() > orbitSpeed)
-                move = Vector2.Normalize(move) * orbitSpeed;
-
-            NPC.velocity = move;
-
-            NPC.rotation = NPC.velocity.X * 0.03f;
-
-            int fireRate = phase == 3 ? 10 : 18;
-
-            if (NPC.ai[1] % fireRate == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+            // Finished?
+            if (dashNumber >= totalDashes)
             {
-                Vector2 dir = player.Center - NPC.Center;
-                dir.Normalize();
-
-                int p = Projectile.NewProjectile(
-                    NPC.GetSource_FromAI(),
-                    NPC.Center,
-                    dir * 12,
-                    ModContent.ProjectileType<StarOfWraith>(),
-                    20,
-                    0f,
-                    Main.myPlayer);
-
-                Main.projectile[p].timeLeft = 240;
+                NPC.localAI[0] = 0;
+                NextAttack(phase);
+                return;
             }
 
-            if (NPC.ai[1] > 360)
-                NextAttack(phase);
+            // Teleport
+            if (timer == 1)
+            {
+                float angle = Main.rand.NextFloat(MathHelper.TwoPi);
+
+                Vector2 offset = angle.ToRotationVector2() * 500f;
+
+                NPC.Center = player.Center + offset;
+
+                NPC.velocity = Vector2.Zero;
+
+              
+
+                SoundEngine.PlaySound(SoundID.Item8, NPC.Center);
+
+                NPC.netUpdate = true;
+            }
+
+            // Small delay before dash
+            if (timer < 50)
+            {
+                NPC.velocity *= 0.9f;
+                return;
+            }
+
+            // Dash
+            if (timer == 50)
+            {
+                Vector2 dir = player.Center - NPC.Center;
+
+                if (dir != Vector2.Zero)
+                    dir.Normalize();
+
+                float speed = phase == 3 ? 34f : 28f;
+
+                NPC.velocity = dir * speed;
+
+                // SoundEngine.PlaySound(SoundID.Roar, NPC.Center);
+            }
+
+            // End dash
+            if (timer > 90)
+            {
+                NPC.ai[1] = 0;
+                NPC.localAI[0]++;
+            }
         }
 
         private void DeathBeam(Player player, int phase)

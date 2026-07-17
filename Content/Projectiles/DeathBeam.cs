@@ -70,13 +70,7 @@ namespace IlyasWrath.Content.Projectiles
                     Projectile.rotation.ToRotationVector2() *
                     Main.rand.NextFloat(100f, 2500f);
 
-                Dust d = Dust.NewDustPerfect(
-                    pos,
-                    DustID.BlueTorch);
-
-                d.velocity *= 0.2f;
-                d.scale = 1.4f;
-                d.noGravity = true;
+                
             }
         }
 

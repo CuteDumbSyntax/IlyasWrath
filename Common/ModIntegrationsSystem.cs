@@ -42,12 +42,12 @@ namespace IlyasWrath.Common
 			int bossType = ModContent.NPCType<Content.NPCs.Ilya>();
 
 			// The item used to summon the boss with (if available)
-			int spawnItem = ModContent.ItemType<Content.Items.ragequit>();
+			int spawnItem = ModContent.ItemType<Content.Items.BlackFlower>();
 
 			// "collectibles" like relic, trophy, mask, pet
 			List<int> collectibles = new List<int>()
 			{
-				ModContent.ItemType<Content.Items.ragequit>()
+				ModContent.ItemType<Content.Placeable.IlyaRelic>()
 				//ModContent.ItemType<Content.Pets.MinionBossPet.MinionBossPetItem>(),
 				//ModContent.ItemType<Content.Items.Placeable.Furniture.MinionBossTrophy>(),
 				//ModContent.ItemType<Content.Items.Armor.Vanity.MinionBossMask>()

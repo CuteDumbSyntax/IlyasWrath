@@ -71,5 +71,14 @@ namespace IlyasWrath.Content.Items
 			return true;
 		}
 
+		public override void AddRecipes()
+		{
+			CreateRecipe()
+				.AddIngredient(ItemID.LunarBar, 10)
+				.AddIngredient(ItemID.Daybloom)
+				.AddTile(TileID.Anvils)
+				.Register();
+		}
+
 	}
 }

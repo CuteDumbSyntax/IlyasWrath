@@ -34,24 +34,24 @@ namespace IlyasWrath.Content.Items
         {
             MoreHealth modPlayer = player.GetModPlayer<MoreHealth>();
 
-            if (modPlayer.UltraLife >= 1000)
+            if (modPlayer.UltraLife >= 2000)
                 return false;
 
-            modPlayer.UltraLife += 1000;
+            modPlayer.UltraLife += 2000;
 
-            player.statLife += 1000;
+            player.statLife += 2000;
 
             if (player.statLife > player.statLifeMax2)
                 player.statLife = player.statLifeMax2;
 
-            player.HealEffect(1000);
+            player.HealEffect(2000);
 
             return true;
         }
 
         public override bool CanUseItem(Player player)
         {
-            return player.GetModPlayer<MoreHealth>().UltraLife < 1000;
+            return player.GetModPlayer<MoreHealth>().UltraLife < 2000;
         }
     }
 }

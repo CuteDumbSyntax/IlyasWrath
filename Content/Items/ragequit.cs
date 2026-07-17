@@ -26,12 +26,6 @@ namespace IlyasWrath.Content.Items
 			Item.autoReuse = true;
 		}
 
-		public override void AddRecipes()
-		{
-			Recipe recipe = CreateRecipe();
-			recipe.AddIngredient(ItemID.DirtBlock, 10);
-			recipe.AddTile(TileID.WorkBenches);
-			recipe.Register();
-		}
+		
 	}
 }
