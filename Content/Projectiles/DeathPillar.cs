@@ -107,21 +107,7 @@ namespace IlyasWrath.Content.Projectiles
             // Draw glowing start texture
             Vector2 startOrigin = start.Size() / 2f;
 
-            for (int i = 0; i < 5; i++)
-            {
-                Vector2 offset = Main.rand.NextVector2Circular(3f, 3f);
-
-                Main.EntitySpriteDraw(
-                    start,
-                    emitter - Main.screenPosition + offset,
-                    null,
-                    Color.Cyan * 0.4f,
-                    0f,
-                    startOrigin,
-                    1.2f,
-                    SpriteEffects.None,
-                    0);
-            }
+            
 
             Main.EntitySpriteDraw(
                 start,

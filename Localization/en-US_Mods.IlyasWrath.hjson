@@ -25,6 +25,25 @@ Items: {
 		DisplayName: Root
 		Tooltip: "[c/9900ff:For unknown reason, you feel dumber wearing this]"
 	}
+
+	BlackFlower: {
+		DisplayName: Black Flower
+		Tooltip:
+			'''
+			Not Consumable
+			Summons [c/2111ff:Ilya]
+			'''
+	}
+
+	Gift: {
+		DisplayName: Gift
+		Tooltip:
+			'''
+			Permanently increases maximum life by 1000
+
+			[c/9900ff:"I mean... Every boss has more than 1,000 health, and player has only 500 maximum health... Not fair!"]
+			'''
+	}
 }
 
 NPCs: {
