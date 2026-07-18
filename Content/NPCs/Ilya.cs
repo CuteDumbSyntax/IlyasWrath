@@ -435,7 +435,16 @@ namespace IlyasWrath.Content.NPCs
 
         private void SummonAdds(Player player, int phase)
         {
-            Move(player.Center + new Vector2(0, -550), phase);
+            Vector2 target = new Vector2(player.Center.X, player.Center.Y - 550f);
+
+            NPC.Center = Vector2.Lerp(
+                NPC.Center,
+                target,
+                0.08f);
+
+            NPC.velocity = Vector2.Zero;
+
+            NPC.rotation = 0f;
 
             if (NPC.ai[1] == 1 && Main.netMode != NetmodeID.MultiplayerClient)
             {

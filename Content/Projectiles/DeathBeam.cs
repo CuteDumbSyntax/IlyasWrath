@@ -95,8 +95,17 @@ namespace IlyasWrath.Content.Projectiles
 
             Vector2 startOrigin = start.Size() / 2f;
 
-            
 
+            Main.EntitySpriteDraw(
+                texture,
+                Projectile.Center - Main.screenPosition,
+                null,
+                Color.White,
+                Projectile.rotation,
+                origin,
+                scale,
+                SpriteEffects.None,
+                0);
             // Main sprite
             Main.EntitySpriteDraw(
                 start,
@@ -109,17 +118,7 @@ namespace IlyasWrath.Content.Projectiles
                 SpriteEffects.None,
                 0);
 
-            // Main beam
-            Main.EntitySpriteDraw(
-                texture,
-                Projectile.Center - Main.screenPosition,
-                null,
-                Color.White,
-                Projectile.rotation,
-                origin,
-                scale,
-                SpriteEffects.None,
-                0);
+           
 
             return false;
         }

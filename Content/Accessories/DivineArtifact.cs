@@ -29,5 +29,31 @@ namespace IlyasWrath.Content.Accessories
 
 		}
 
+		public override void AddRecipes()
+		{
+			CreateRecipe()
+				.AddIngredient(ItemID.LunarBar, 20)
+
+				.AddIngredient(ItemID.SorcererEmblem)
+				.AddIngredient(ItemID.WarriorEmblem)
+				.AddIngredient(ItemID.SummonerEmblem)
+				.AddIngredient(ItemID.RangerEmblem)
+
+				.AddIngredient(ItemID.SoulofFright, 10)
+				.AddIngredient(ItemID.SoulofMight, 10)
+				.AddIngredient(ItemID.SoulofSight, 10)
+
+				.AddIngredient(4276)
+
+				.AddIngredient(ItemID.CopperShortsword)
+				.AddIngredient(ItemID.WandofSparking)
+				.AddIngredient(ItemID.WoodenBow)
+
+				.AddIngredient(ItemID.AbigailsFlower)
+
+				.AddTile(TileID.LunarCraftingStation)
+				.Register();
+		}
+
 	}
 }

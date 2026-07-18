@@ -69,6 +69,21 @@ Items: {
 		DisplayName: Censored Thing
 		Tooltip: ""
 	}
+
+	TrueCopperBreastplate: {
+		DisplayName: True Copper Breastplate
+		Tooltip: ""
+	}
+
+	CthulhusHeart: {
+		DisplayName: Cthulhus Heart
+		Tooltip:
+			'''
+			Summons Boss Rush
+
+			(STILL WIP, use it at your own risk!)
+			'''
+	}
 }
 
 NPCs: {
@@ -91,6 +106,6 @@ Projectiles: {
 Buffs: {
 	FunnyIlyaBuff: {
 		DisplayName: Censored cutie
-		Description: You have a flying pet! But you can't really see it.
+		Description: ... But you can't really see it.
 	}
 }

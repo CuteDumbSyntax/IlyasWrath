@@ -45,6 +45,7 @@ namespace IlyasWrath.Content.Items
 
 			itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<Gift>(), 1));
 			itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<CensoredThing>(), 1));
+			itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<CthulhusHeart>(), 1));
 
 			itemLoot.Add(ItemDropRule.CoinsBasedOnNPCValue(ModContent.NPCType<Ilya>()));
 		}
